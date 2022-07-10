@@ -1,6 +1,13 @@
 pragma circom 2.0.0;
 
-include "../../node_modules/circomlib/circuits/comparators.circom";
+include "/home/magu/week1/recursive/Q3/projects/zkPuzzles/node_modules/circomlib/circuits/comparators.circom";
+template Multiplier2(){
+    signal input in1;
+    signal input in2;
+    signal output out;
+
+    out <==in1 * in2;
+}
 
 template RangeProof(n) {
     assert(n <= 252);
@@ -10,6 +17,15 @@ template RangeProof(n) {
 
     component lt = LessEqThan(n);
     component gt = GreaterEqThan(n);
+    component mult =Multiplier2();
 
-    // [assignment] insert your code here
+    lt.in[0] <== in;
+    lt.in[1] <== range[1];
+    
+    gt.in[0] <== in;
+    gt.in[1] <== range[0];
+
+    mult.in1 <== lt.out;
+    mult.in2 <== gt.out;
+    out <== mult.out;
 }
